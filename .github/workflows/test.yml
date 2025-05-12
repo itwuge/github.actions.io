@@ -23,13 +23,12 @@ on:
         - cron: 0 */18 * * *
 # 执行的一项或多项任务。
 jobs:
-	# jobs ID 自定义 一项任务就一个 ID 
+# jobs ID 自定义 一项任务就一个 ID 
   build:
-  	#  字段指定任务运行所需要的虚拟服务器环境
+  # 字段指定任务运行所需要的虚拟服务器环境
     runs-on: ubuntu-20.04
     # 判断是仓库持有者
     if: github.event.repository.owner.id == github.event.sender.id
-		# 
     steps:
     - name: 拉取分支
       uses: actions/checkout@main
