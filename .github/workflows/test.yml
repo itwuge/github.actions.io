@@ -51,4 +51,4 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: wuge
-        path: path/wuge.tar.gz
+        path: /home/runner/work/github.actions.io/github.actions.io/wuge.tar.gz
