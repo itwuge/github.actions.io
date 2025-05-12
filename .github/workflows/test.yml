@@ -2,7 +2,7 @@
 name: test-actions
 # on字段指定触发 workflow 的条件，通常是某些事件。
 on:
-	# 手动触发工作流 比如在窗口添加一个按钮
+  # 手动触发工作流 比如在窗口添加一个按钮
   repository_dispatch:
   # workflow_dispatch 事件 最多可以定义 10 个 inputs
   workflow_dispatch:
