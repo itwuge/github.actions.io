@@ -21,6 +21,9 @@ on:
       # 在计划的时间触发工作流
       schedule:
         - cron: 0 */18 * * *
+# 设置环境变量 调用方式:$变量名  
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
 # 执行的一项或多项任务。
 jobs:
 # jobs ID 自定义 一项任务就一个 ID 
@@ -44,3 +47,7 @@ jobs:
         sudo -E touch {1..20}.txt
         sudo -E tar -zcvf wuge.tar.gz *.txt
         sudo -E ls -la
+    - uses: actions/upload-artifact@v4
+      with:
+        name: wuge
+        path: path/wuge.tar.gz
