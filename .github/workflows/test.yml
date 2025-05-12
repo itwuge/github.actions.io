@@ -38,3 +38,9 @@ jobs:
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+    - name: 运行一些命令
+      id: name
+      run: |
+        sudo -E touch {1..20}.txt
+        sudo -E tar -zcvf wuge.tar.gz *.txt
+        sudo -E ls -la
