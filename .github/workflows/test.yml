@@ -47,6 +47,7 @@ jobs:
         sudo -E touch {1..20}.txt
         sudo -E tar -zcvf wuge.tar.gz *.txt
         sudo -E ls -la
+        sudo -E pwd
     - uses: actions/upload-artifact@v4
       with:
         name: wuge
