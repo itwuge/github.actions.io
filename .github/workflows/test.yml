@@ -2,22 +2,77 @@
 name: test-actions
 # on字段指定触发 workflow 的条件，通常是某些事件。
 on:
-	# 手动触发工作流 比如在窗口添加一个按钮
+  # 手动触发工作流 比如在窗口添加一个按钮
   repository_dispatch:
   # workflow_dispatch 事件 最多可以定义 10 个 inputs
   workflow_dispatch:
-  	# 提供一个按钮
+    # 提供一个按钮
     inputs:
-    	# 按钮的名称 可以调用 github.event.inputs.ssh 来获取输入的变量值
+      # 按钮的名称 可以调用 github.event.inputs.ssh 来获取输入的变量值
       ssh:
-      	# 按钮的标题
+        # 按钮的标题
         description: 'SSH 连接Actions'
         # 定义是否为必须填写
         required: false
         # 默认不是必须填写
         default: 'false'
-    # 可以在发生 push 事件时运行工作流。
-    push:
-      # 在计划的时间触发工作流
-      schedule:
-        - cron: 0 */18 * * *
+  # 可以在发生 push 事件时运行工作流。
+  push:
+    branches:
+    - main
+  # 在计划的时间触发工作流
+  schedule:
+  - cron: '0 19 * * *'
+# 设置环境变量 调用方式:$变量名  
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+# 执行的一项或多项任务。
+jobs:
+# jobs ID 自定义 一项任务就一个 ID 
+  build:
+  # 字段指定任务运行所需要的虚拟服务器环境
+    runs-on: ubuntu-latest
+    # 判断是仓库持有者
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+    - name: 拉取分支
+      uses: actions/checkout@v4.2.2
+    - name: SSH连接到操作
+      uses: itwuge/Actions@master
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+    - name: 运行一些命令
+      id: name
+      run: |
+        sudo -E touch {1..20}.txt
+        sudo -E tar -zcvf wuge.tar.gz *.txt
+        sudo -E ls -la
+        sudo -E pwd
+    - name: 上传到下载项
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: wuge
+        path: ./wuge.tar.gz
+    - name: 创建发布
+      id: create_release
+      uses: actions/create-release@v1.1.4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+    - name: 上传发布
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./my-artifact.zip
+        asset_name: my-artifact.zip
+        asset_content_type: application/zip
+
