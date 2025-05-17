@@ -2,21 +2,6 @@
 name: test-actions
 # on字段指定触发 workflow 的条件，通常是某些事件。
 on:
-  # 手动触发工作流 比如在窗口添加一个按钮
-  repository_dispatch:
-  # workflow_dispatch 事件 最多可以定义 10 个 inputs
-  workflow_dispatch:
-    # 提供一个按钮
-    inputs:
-      # 按钮的名称 可以调用 github.event.inputs.ssh 来获取输入的变量值
-      ssh:
-        # 按钮的标题
-        description: 'SSH 连接Actions'
-        # 定义是否为必须填写
-        required: false
-        # 默认不是必须填写
-        default: 'false'
-  # 可以在发生 push 事件时运行工作流。
   push:
     branches:
     - main
