@@ -20,6 +20,8 @@ on:
   push:
     branches:
     - main
+    tags:
+      - v* 
   # 在计划的时间触发工作流
   schedule:
   - cron: '0 19 * * *'
