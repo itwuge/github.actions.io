@@ -16,11 +16,13 @@ on:
         required: false
         # 默认不是必须填写
         default: 'false'
-    # 可以在发生 push 事件时运行工作流。
-    push:
-      # 在计划的时间触发工作流
-      schedule:
-        - cron: 0 */18 * * *
+  # 可以在发生 push 事件时运行工作流。
+  push:
+    branches:
+    - main
+  # 在计划的时间触发工作流
+  schedule:
+  - cron: '0 19 * * *'
 # 设置环境变量 调用方式:$变量名  
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
